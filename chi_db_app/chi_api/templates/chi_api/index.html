@@ -1,0 +1,9 @@
+{% if vehicle_list %}
+    <ul>
+    {% for vehicle in vehicle_list %}
+        <li><a href="/chi_api/{{ vehicle.id }}/">{{ vehicle.vin }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No vehicles available.</p>
+{% endif %}
