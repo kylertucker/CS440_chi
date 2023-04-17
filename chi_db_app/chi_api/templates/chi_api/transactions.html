@@ -1,0 +1,9 @@
+{% if transaction_list %}
+    <ul>
+    {% for transaction in transaction_list %}
+        <li>{{ transaction.transaction_id }} : {{ transaction.transaction_type }}</li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No transactions available.</p>
+{% endif %}

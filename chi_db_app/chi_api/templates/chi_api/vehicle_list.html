@@ -1,7 +1,7 @@
 {% if vehicle_list %}
     <ul>
     {% for vehicle in vehicle_list %}
-        <li><a href="/chi_api/{{ vehicle.id }}/">{{ vehicle.vin }}</a></li>
+        <li><a href="{%url 'vehicle' id=vehicle.vehicle_id%}">{{ vehicle.vin }}</a> : {{ vehicle.make }}</li>
     {% endfor %}
     </ul>
 {% else %}

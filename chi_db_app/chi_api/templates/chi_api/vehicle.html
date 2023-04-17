@@ -1,0 +1,13 @@
+{% if vehicle %}
+        <h1>{{ vehicle.vin }}</h1>
+        <h3>{{ vehicle.make }}</h3>
+        <h3>{{ vehicle.model }}</h3>
+        <h3>{{ vehicle.year }}</h3>
+        <h3>{{ vehicle.trim }}</h3>
+        <h3>{{ vehicle.color }}</h3>
+        <h3>{{ vehicle.mpg }}</h3>
+        <h3>{{ vehicle.milage }}</h3>
+        <h3>{{ vehicle.country_of_assembly }}</h3>
+{% else %}
+    <p>No vehicles available.</p>
+{% endif %}
