@@ -112,7 +112,7 @@ def employee(request, id):
                    "LEFT JOIN vehicle "
                    "ON  vehicle_transaction.vehicle_id = vehicle.vehicle_id "
                    "LEFT JOIN customer "
-                   "ON  vehicle_transaction.employee_id = customer.customer_id "
+                   "ON  vehicle_transaction.customer_id = customer.customer_id "
                    "WHERE employee_id = %s", [id])
     transactions = cursor.fetchall()
     template = loader.get_template("chi_api/employee.html")
