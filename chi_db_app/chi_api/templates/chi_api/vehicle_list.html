@@ -1,7 +1,9 @@
 {% if vehicle_list %}
     <ul>
     {% for vehicle in vehicle_list %}
-        <li><a href="{%url 'vehicle' id=vehicle.vehicle_id%}">{{ vehicle.vin }}</a> : {{ vehicle.make }}</li>
+        <li><a href="{%url 'vehicle' id=vehicle.vehicle_id%}">{{ vehicle.vin }}:
+            {{ vehicle.year }} {{ vehicle.make }} {{ vehicle.model }}
+        </a></li>
     {% endfor %}
     </ul>
 {% else %}

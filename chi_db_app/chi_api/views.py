@@ -24,10 +24,15 @@ def vehicle_list(request):
 def vehicle(request, id):
     # TODO switch to sql
     vehicle = Vehicle.objects.get(pk=id)
-
     template = loader.get_template("chi_api/vehicle.html")
+
+    histories = []
+    for history in vehicle.vehiclehistory_set.all():
+        histories.append(history)
+
     context = {
         "vehicle": vehicle,
+        "histories": histories
     }
     return HttpResponse(template.render(context, request))
 

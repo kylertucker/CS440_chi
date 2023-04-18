@@ -1,13 +1,25 @@
 {% if vehicle %}
-        <h1>{{ vehicle.vin }}</h1>
-        <h3>{{ vehicle.make }}</h3>
-        <h3>{{ vehicle.model }}</h3>
-        <h3>{{ vehicle.year }}</h3>
-        <h3>{{ vehicle.trim }}</h3>
-        <h3>{{ vehicle.color }}</h3>
-        <h3>{{ vehicle.mpg }}</h3>
-        <h3>{{ vehicle.milage }}</h3>
-        <h3>{{ vehicle.country_of_assembly }}</h3>
+    <h1>Vehicle</h1>
+    <h3>VIN: {{ vehicle.vin }}</h3>
+    <h3>Make: {{ vehicle.make }}</h3>
+    <h3>Model: {{ vehicle.model }}</h3>
+    <h3>Year: {{ vehicle.year }}</h3>
+    <h3>Trim: {{ vehicle.trim }}</h3>
+    <h3>Color: {{ vehicle.color }}</h3>
+    <h3>MPG: {{ vehicle.mpg }}</h3>
+    <h3>Milage: {{ vehicle.milage }}</h3>
+    <h3>Country of Assembly: {{ vehicle.country_of_assembly }}</h3>
+
+    <h1>History</h1>
+    {% if histories %}
+        {% for history in histories %}
+            <h2>History Type: {{ history.history_type }}</h2>
+            <h4>Date: {{ history.history_date }}</h4>
+            <h4>Description: {{ history.description }}</h4>
+        {% endfor %}
+    {% else %}
+        <h3>No History To Show</h3>
+    {% endif %}
 {% else %}
     <p>No vehicles available.</p>
 {% endif %}
