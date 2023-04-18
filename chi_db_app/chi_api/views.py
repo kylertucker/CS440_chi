@@ -1,15 +1,17 @@
+from django.db import connections
 from django.shortcuts import render
 
 from django.http import HttpResponse
 
 from chi_api.models import Vehicle, Customer
 from django.template import loader
-
+from django.views.decorators.csrf import csrf_exempt
 
 
 def home_page(request):
     template = loader.get_template("chi_api/home_page.html")
     return HttpResponse(template.render(request=request))
+
 
 def vehicle_list(request):
     # TODO switch to sql
@@ -20,6 +22,7 @@ def vehicle_list(request):
         "vehicle_list": qs,
     }
     return HttpResponse(template.render(context, request))
+
 
 def vehicle(request, id):
     # TODO switch to sql
@@ -36,6 +39,7 @@ def vehicle(request, id):
     }
     return HttpResponse(template.render(context, request))
 
+
 def customer_list(request):
     # TODO switch to sql
     customers = Customer.objects.all()
@@ -44,6 +48,7 @@ def customer_list(request):
         "customer_list": customers
     }
     return HttpResponse(template.render(context, request))
+
 
 def customer(request, id) :
     # TODO switch to sql
@@ -57,4 +62,23 @@ def customer(request, id) :
         "transactions": transactions
     }
     return HttpResponse(template.render(context, request))
+
+
+@csrf_exempt
+def customer_form(request):
+    if request.method == 'POST':
+        name = request.POST.get('name', '')
+        license_number = request.POST.get('license_number', '')
+        license_state = request.POST.get('license_state', '')
+        insurance_provider = request.POST.get('insurance_provider', '')
+        policy_number = request.POST.get('policy_number', '')
+        cursor = connections['default'].cursor()
+        db_response = cursor.execute("INSERT INTO customer "
+                                     "(name, license_number, license_state, insurance_provider, policy_number) "
+                                     "VALUES (%s, %s, %s, %s, %s)",
+                                     [name, license_number, license_state, insurance_provider, policy_number])
+        return HttpResponse('successfully submitted')
+
+    template = loader.get_template('chi_api/customer_form.html')
+    return HttpResponse(template.render(request=request))
 
