@@ -53,12 +53,18 @@ def customer_list(request):
 
 
 def customer(request, id) :
-    # TODO switch to sql
-    customer = Customer.objects.get(pk=id)
+    cursor = connections['default'].cursor()
+    cursor.execute("SELECT * FROM customer "
+                   "WHERE customer.customer_id = %s", [id])
+    customer = cursor.fetchone()
+    cursor.execute("SELECT * FROM vehicle_transaction "
+                   "LEFT JOIN vehicle "
+                   "ON vehicle_transaction.vehicle_id = vehicle.vehicle_id "
+                   "LEFT JOIN employee "
+                   "ON vehicle_transaction.employee_id = employee.employee_id " 
+                   "WHERE customer_id = %s", [id])
+    transactions = cursor.fetchall()
     template = loader.get_template('chi_api/customer.html')
-    transactions = []
-    for transaction in customer.vehicletransaction_set.all():
-        transactions.append(transaction)
     context = {
         "customer": customer,
         "transactions": transactions
