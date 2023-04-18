@@ -3,7 +3,7 @@ from django.shortcuts import render
 
 from django.http import HttpResponse
 
-from chi_api.models import Vehicle, Customer
+from chi_api.models import Vehicle, Customer, Employee
 from django.template import loader
 from django.views.decorators.csrf import csrf_exempt
 
