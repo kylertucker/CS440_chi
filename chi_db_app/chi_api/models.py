@@ -51,8 +51,8 @@ class Employee(models.Model):
         db_table = "employee"
 
 
-class Transaction(models.Model):
-    transaction_id = models.AutoField(primary_key=True, blank=False, null=False)
+class VehicleTransaction(models.Model):
+    vehicle_transaction_id = models.AutoField(primary_key=True, blank=False, null=False)
     employee = models.ForeignKey(Employee, models.DO_NOTHING)
     customer = models.ForeignKey(Customer, models.DO_NOTHING)
     vehicle = models.ForeignKey(Vehicle, models.DO_NOTHING)
@@ -60,7 +60,7 @@ class Transaction(models.Model):
     sale_price = models.DecimalField(max_digits=9, decimal_places=2, blank=True, null=True)
 
     class Meta:
-        db_table = "transaction"
+        db_table = "vehicle_transaction"
 
 
 

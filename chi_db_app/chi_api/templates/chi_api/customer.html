@@ -1,0 +1,24 @@
+{% if customer %}
+    <h1>Customer ID: {{ customer.customer_id }}</h1>
+    <h3>Name: {{ customer.name }}</h3>
+    <h3>License Number: {{ customer.license_number }}</h3>
+    <h3>License State: {{ customer.license_state }}</h3>
+    <h3>Insurance Provider: {{ customer.insurance_provider }}</h3>
+    <h3>Policy Number: {{ customer.policy_number }}</h3>
+
+    <h1>Transactions</h1>
+    {% if transactions %}
+        {% for transaction in transactions %}
+            <h3>Transaction ID: {{ transaction.vehicle_transaction_id }}</h3>
+            <h3>Employee Name: {{ transaction.employee.name }}</h3>
+            <h3>Vehicle: {{ transaction.vehicle.make }} {{ transaction.vehicle.model }}</h3>
+            <h3>Transaction Type: {{ transaction.transaction_type }}</h3>
+            <h3>Sale Price: {{ transaction.sale_price }}</h3>
+        {% endfor %}
+    {% else %}
+        <h3>No Transactions</h3>
+    {% endif %}
+
+{% else %}
+    <p>No customer available.</p>
+{% endif %}

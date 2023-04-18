@@ -1,0 +1,9 @@
+{% if customer_list %}
+    <ul>
+    {% for customer in customer_list %}
+        <li><a href="{%url 'customer' id=customer.customer_id%}">{{ customer.customer_id }} : {{ customer.name }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No customers available.</p>
+{% endif %}
