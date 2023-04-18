@@ -1,0 +1,11 @@
+{% if employee_list %}
+    <ul>
+        {% for employees in employee_list %}
+            <li>
+               bruh {{ employees.name }} {{ employees.job_title }}
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>no employees available</p>
+{% endif %}

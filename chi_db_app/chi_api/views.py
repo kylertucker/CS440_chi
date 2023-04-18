@@ -84,3 +84,22 @@ def customer_form(request):
     template = loader.get_template('chi_api/customer_form.html')
     return HttpResponse(template.render(request=request))
 
+def employee_list(request):
+    cursor = connections['default'].cursor()
+
+    cursor.execute("SELECT * FROM employee")
+    employees = cursor.fetchall()
+    template = loader.get_template('chi_api/employee_list.html')
+    context = {
+        "employee_list": employees
+    }
+    return HttpResponse(template.render(context, request))
+
+def employee(request, id):
+    employees = Employee.objects.get(pk=id)
+    template = loader.get_template("chi_api/employee.html")
+
+    context = {
+        "employee": employees
+    }
+    return HttpResponse(template.render(context, request))
