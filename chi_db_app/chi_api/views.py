@@ -41,8 +41,10 @@ def vehicle(request, id):
 
 
 def customer_list(request):
-    # TODO switch to sql
-    customers = Customer.objects.all()
+    cursor = connections['default'].cursor()
+
+    cursor.execute("SELECT * FROM customer")
+    customers = cursor.fetchall()
     template = loader.get_template('chi_api/customer_list.html')
     context = {
         "customer_list": customers
