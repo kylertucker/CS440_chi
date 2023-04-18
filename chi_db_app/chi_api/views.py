@@ -90,6 +90,7 @@ def customer_form(request):
     template = loader.get_template('chi_api/customer_form.html')
     return HttpResponse(template.render(request=request))
 
+
 def employee_list(request):
     cursor = connections['default'].cursor()
 
@@ -101,11 +102,23 @@ def employee_list(request):
     }
     return HttpResponse(template.render(context, request))
 
+
 def employee(request, id):
-    employees = Employee.objects.get(pk=id)
+    cursor = connections['default'].cursor()
+    cursor.execute("SELECT * FROM employee "
+                   "WHERE employee_id = %s", [id])
+    employee = cursor.fetchone()
+    cursor.execute("SELECT * FROM vehicle_transaction "
+                   "LEFT JOIN vehicle "
+                   "ON  vehicle_transaction.vehicle_id = vehicle.vehicle_id "
+                   "LEFT JOIN customer "
+                   "ON  vehicle_transaction.employee_id = customer.customer_id "
+                   "WHERE employee_id = %s", [id])
+    transactions = cursor.fetchall()
     template = loader.get_template("chi_api/employee.html")
 
     context = {
-        "employee": employees
+        "employee": employee,
+        "transactions": transactions
     }
     return HttpResponse(template.render(context, request))

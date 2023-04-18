@@ -1,10 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% if employee %}
+    <h1>Employee ID: {{ employee.0 }}</h1>
+    <h3>Name: {{ employee.1 }}</h3>
+    <h3>Job_Title: {{ employee.2 }}</h3>
+    <h3>Salary: {{ employee.3 }}</h3>
+    <h3>Benefits: {{ employee.4 }}</h3>
 
-</body>
-</html>
+    <h1>Transactions</h1>
+    {% if transactions %}
+        {% for transaction in transactions %}
+            <h2>Transaction ID: {{ transaction.0 }}</h2>
+            <h3>Employee Name: {{ transaction.17 }}</h3>
+            <h3>Vehicle: {{ transaction.8 }} {{ transaction.9 }}</h3>
+            <h3>Transaction Type: {{ transaction.1 }}</h3>
+            <h3>Sale Price: {{ transaction.2 }}</h3>
+        {% endfor %}
+    {% else %}
+        <h3>No Transactions</h3>
+    {% endif %}
+
+{% else %}
+    <p>No customer available.</p>
+{% endif %}
