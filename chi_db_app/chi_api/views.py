@@ -13,15 +13,46 @@ def home_page(request):
     return HttpResponse(template.render(request=request))
 
 
-def vehicle_list(request):
-    # TODO switch to sql
-    qs = Vehicle.objects.all()
+# def vehicle_list(request):
+#     # TODO switch to sql
+#     qs = Vehicle.objects.all()
+#
+#     template = loader.get_template("chi_api/vehicle_list.html")
+#     context = {
+#         "vehicle_list": qs,
+#     }
+#     return HttpResponse(template.render(context, request))
 
-    template = loader.get_template("chi_api/vehicle_list.html")
+from django.db import connection
+from django.http import HttpResponse
+from django.template import loader
+
+def vehicle_list(request):
+    with connection.cursor() as cursor:
+        cursor.execute('SELECT * FROM vehicle')
+        rows = cursor.fetchall()
+        vehicles = []
+        for row in rows:
+            vehicle = {
+                'vehicle_id': row[0],
+                'vin': row[1],
+                'make': row[2],
+                'model': row[3],
+                'year': row[4],
+                'trim': row[5],
+                'color': row[6],
+                'mpg': row[7],
+                'mileage': row[8],
+                'country_of_assembly': row[9]
+            }
+            vehicles.append(vehicle)
+
+    template = loader.get_template('chi_api/vehicle_list.html')
     context = {
-        "vehicle_list": qs,
+        'vehicle_list': vehicles,
     }
     return HttpResponse(template.render(context, request))
+
 
 
 def vehicle(request, id):
@@ -91,14 +122,35 @@ def customer_form(request):
     return HttpResponse(template.render(request=request))
 
 
-def employee_list(request):
-    cursor = connections['default'].cursor()
+# def employee_list(request):
+#     cursor = connections['default'].cursor()
+#
+#     cursor.execute("SELECT * FROM employee")
+#     employees = cursor.fetchall()
+#     template = loader.get_template('chi_api/employee_list.html')
+#     context = {
+#         "employee_list": employees
+#     }
+#     return HttpResponse(template.render(context, request))
 
-    cursor.execute("SELECT * FROM employee")
-    employees = cursor.fetchall()
+def employee_list(request):
+    with connection.cursor() as cursor:
+        cursor.execute('SELECT * FROM employee')
+        rows = cursor.fetchall()
+        employees = []
+        for row in rows:
+            employee = {
+                'employee_id': row[0],
+                'name': row[1],
+                'job_title': row[2],
+                'salary': row[3],
+                'benefits': row[4]
+            }
+            employees.append(employee)
+
     template = loader.get_template('chi_api/employee_list.html')
     context = {
-        "employee_list": employees
+        'employee_list': employees,
     }
     return HttpResponse(template.render(context, request))
 
