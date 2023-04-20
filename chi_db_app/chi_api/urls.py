@@ -11,4 +11,6 @@ urlpatterns = [
     path("customer-form", views.customer_form, name='customer_form'),
     path('customer/<int:id>/update', views.update_customer, name='update_customer'),
     path('vehicle/<int:id>/add-history', views.add_vehicle_history, name='add_vehicle_history'),
+    path("employee-list", views.employee_list, name='employee_list'),
+    path("employee/<int:id>", views.employee, name='employee')
 ]

@@ -1,0 +1,11 @@
+{% if employee_list %}
+    <ul>
+        {% for employee in employee_list %}
+            <li>
+                <a href="{% url "employee" id=employee.0 %} ">{{ employee.1 }} {{ employee.2 }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>no employees available</p>
+{% endif %}
