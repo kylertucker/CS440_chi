@@ -39,15 +39,25 @@ def vehicle(request, id):
     }
     return HttpResponse(template.render(context, request))
 
+@csrf_exempt
 def add_vehicle_history(request, id):
 
-  #  template = loader.get_template('chi_api/add_vehicle_history.html')
+    vehicle = Vehicle.objects.get(pk=id)
 
-    histories = []
+    if request.method == 'POST':
+        vehicle.history_type = request.POST['history_type']
+        vehicle.history_date = request.POST['history_date']
+        vehicle.description = request.POST['history_description']
+        vehicle.save()
+        return redirect('vehicle', id=id)
+
+
+
+    #histories = []
 
     context = {
-        "vehicle": vehicle,
-        "histories": histories
+        "vehicle": vehicle
+        #"histories": histories
     }
     return render(request, 'chi_api/add_vehicle_history.html', context)
 

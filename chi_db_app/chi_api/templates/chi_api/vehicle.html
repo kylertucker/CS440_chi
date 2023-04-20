@@ -1,4 +1,5 @@
 {% if vehicle %}
+
     <h1>Vehicle</h1>
     <h3>VIN: {{ vehicle.vin }}</h3>
     <h3>Make: {{ vehicle.make }}</h3>
@@ -9,9 +10,9 @@
     <h3>MPG: {{ vehicle.mpg }}</h3>
     <h3>Mileage: {{ vehicle.mileage }}</h3>
     <h3>Country of Assembly: {{ vehicle.country_of_assembly }}</h3>
+    <button><a href=" {% url 'add_vehicle_history' id=vehicle.vehicle_id%}">add additional history</a></button>
 
     <h1>History</h1>
-    <button><a href="{% url 'add_vehicle_history' id=vehicle.history%}">add additional history</a></button>
     {% if histories %}
         {% for history in histories %}
             <h2>History Type: {{ history.history_type }}</h2>
