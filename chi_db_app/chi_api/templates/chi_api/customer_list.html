@@ -1,5 +1,6 @@
 {% if customer_list %}
     <button><a href="{% url 'customer_form' %}">create new customer</a></button>
+
     <ul>
     {% for customer in customer_list %}
         <li><a href="{%url 'customer' id=customer.0%}">{{ customer.0 }} : {{ customer.1 }}</a></li>
