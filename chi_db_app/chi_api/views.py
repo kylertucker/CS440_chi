@@ -45,10 +45,15 @@ def add_vehicle_history(request, id):
     vehicle = Vehicle.objects.get(pk=id)
 
     if request.method == 'POST':
-        vehicle.history_type = request.POST['history_type']
-        vehicle.history_date = request.POST['history_date']
-        vehicle.description = request.POST['history_description']
-        vehicle.save()
+        history_type = request.POST.get('history_type', '')
+        history_date = request.POST.get('history_date', '')
+        description = request.POST.get('history_description', '')
+
+        cursor = connections['default'].cursor()
+        db_response = cursor.execute("INSERT INTO vehicle_history"
+                                     "(history_type, history_date, description, vehicle_id)"
+                                     "VALUES (%s, %s, %s, %s)", [history_type, history_date, description, id])
+
         return redirect('vehicle', id=id)
 
 
