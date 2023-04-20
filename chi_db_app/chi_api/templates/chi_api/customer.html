@@ -5,6 +5,7 @@
     <h3>License State: {{ customer.license_state }}</h3>
     <h3>Insurance Provider: {{ customer.insurance_provider }}</h3>
     <h3>Policy Number: {{ customer.policy_number }}</h3>
+    <a href="{% url 'update_customer' id=customer.customer_id %}">Edit</a>
 
     <h1>Transactions</h1>
     {% if transactions %}
