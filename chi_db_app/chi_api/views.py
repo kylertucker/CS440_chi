@@ -56,13 +56,8 @@ def add_vehicle_history(request, id):
 
         return redirect('vehicle', id=id)
 
-
-
-    #histories = []
-
     context = {
         "vehicle": vehicle
-        #"histories": histories
     }
     return render(request, 'chi_api/add_vehicle_history.html', context)
 
@@ -104,12 +99,20 @@ def update_customer(request, id):
     customer = Customer.objects.get(pk=id)
 
     if request.method == 'POST':
-        customer.name = request.POST['name']
-        customer.license_number = request.POST['license_number']
-        customer.license_state = request.POST['license_state']
-        customer.insurance_provider = request.POST['insurance_provider']
-        customer.policy_number = request.POST['policy_number']
-        customer.save()
+        name = request.POST.get('name', '')
+        license_number = request.POST.get('license_number', '')
+        license_state = request.POST.get('license_state', '')
+        insurance_provider = request.POST.get('insurance_provider', '')
+        policy_number = request.POST.get('policy_number', '')
+
+        cursor = connections['default'].cursor()
+        db_response = cursor.execute(
+            "UPDATE customer "
+            "SET name = %s, license_number = %s, license_state = %s, insurance_provider = %s, policy_number = %s "
+            "WHERE customer_id = %s",
+            [name, license_number, license_state, insurance_provider, policy_number, id]
+        )
+
         return redirect('customer', id=id)
 
     context = {'customer': customer}
