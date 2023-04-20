@@ -102,6 +102,14 @@ def customer(request, id) :
     }
     return HttpResponse(template.render(context, request))
 
+def delete_customer(request, id):
+    cursor = connections['default'].cursor()
+    cursor.execute("DELETE * FROM Customer WHERE customer.id= %s", id)
+
+    return redirect("chi_api/customer_list.html")
+
+
+
 
 @csrf_exempt
 def customer_form(request):

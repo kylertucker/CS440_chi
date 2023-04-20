@@ -19,6 +19,8 @@
         <h3>No Transactions</h3>
     {% endif %}
 
+    <button><a method="delete" href={%url 'customer_delete' id=customer.0%}>Delete this customer </a></button>
+
 {% else %}
     <p>No customer available.</p>
 {% endif %}
