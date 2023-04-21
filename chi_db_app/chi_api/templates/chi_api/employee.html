@@ -6,6 +6,7 @@
     <h3>Benefits: {{ employee.4 }}</h3>
 
     <h1>Transactions</h1>
+    <a href="{% url 'employee_sales_stats' id=employee.0 %}">View Stats</a>
     {% if transactions %}
         {% for transaction in transactions %}
             <h2>Transaction ID: {{ transaction.0 }}</h2>

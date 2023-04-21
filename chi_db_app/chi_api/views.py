@@ -93,6 +93,42 @@ def customer(request, id) :
     }
     return HttpResponse(template.render(context, request))
 
+def employee_sales_stats(request, id):
+    template = loader.get_template('chi_api/employee_sales_stats.html')
+
+    cursor = connections['default'].cursor()
+
+    cursor.execute("SELECT * FROM employee "
+                   "WHERE employee_id = %s", [id])
+    employee = cursor.fetchone()
+
+    total_sales = cursor.execute("SELECT %s, SUM(sale_price) "
+                                 "FROM vehicle_transaction "
+                                 "WHERE employee_id = %s "
+                                 "GROUP BY %s", [id, id, id])
+    total_sales = cursor.fetchone()
+
+    average_sales = cursor.execute("SELECT %s, ROUND(AVG(sale_price)) "
+                                   "FROM vehicle_transaction "
+                                   "WHERE employee_id = %s "
+                                   "GROUP BY %s", [id, id, id])
+    average_sales = cursor.fetchone()
+
+    total_transactions = cursor.execute("SELECT %s, COUNT(sale_price) "
+                                        "FROM vehicle_transaction "
+                                        "WHERE employee_id = %s "
+                                        "GROUP BY %s", [id, id, id])
+    total_transactions = cursor.fetchone()
+
+    context = {
+        'employee': employee,
+        'total_sales': total_sales,
+        'average_sales': average_sales,
+        'total_transactions': total_transactions
+    }
+
+    return HttpResponse(template.render(context, request))
+
 def update_customer(request, id):
     customer = Customer.objects.get(pk=id)
 

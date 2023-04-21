@@ -1,0 +1,14 @@
+{%  if employee %}
+
+    <h1>Employee ID: {{ employee.0 }}</h1>
+    <h3>Name: {{ employee.1 }}</h3>
+    <h3>Job_Title: {{ employee.2 }}</h3>
+    <h3>Salary: {{ employee.3 }}</h3>
+    <h3>Benefits: {{ employee.4 }}</h3>
+
+    <h1>Transactions</h1>
+    <h3>Sales Revenue: {{ total_sales.1 }}</h3>
+    <h3>Average Sale Price: {{ average_sales.1 }}</h3>
+    <h3>Sum of Sales Transactions: {{ total_transactions.1 }}</h3>
+
+{%  endif %}
