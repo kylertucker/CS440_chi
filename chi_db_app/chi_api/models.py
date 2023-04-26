@@ -12,6 +12,7 @@ class Vehicle(models.Model):
     mpg = models.IntegerField(blank=True, null=True)
     mileage = models.IntegerField(blank=True, null=True)
     country_of_assembly = models.CharField(max_length=50, blank=True, null=True)
+    active = models.BooleanField(default=True)
 
     class Meta:
         db_table = "vehicle"
@@ -35,6 +36,7 @@ class Customer(models.Model):
     license_state = models.CharField(max_length=20, blank=True, null=True)
     insurance_provider = models.CharField(max_length=20, blank=True, null=True)
     policy_number = models.IntegerField(blank=True, null=True)
+    active = models.BooleanField(default=True)
 
     class Meta:
         db_table = "customer"
@@ -46,6 +48,7 @@ class Employee(models.Model):
     job_title = models.CharField(max_length=20, blank=True, null=True)
     salary = models.IntegerField(blank=True, null=True)
     benefits = models.BooleanField(blank=True, null=True)
+    active = models.BooleanField(default=True)
 
     class Meta:
         db_table = "employee"
