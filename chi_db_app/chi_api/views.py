@@ -212,7 +212,7 @@ def employee_form(request):
         benefits = request.POST.get('benefits', '')
         cursor = connections['default'].cursor()
         db_response = cursor.execute("INSERT INTO employee "
-            "(employee_id, employee_name, job_title, salary, benefits) "
+            "(name, job_title, salary, benefits) "
             "VALUES (%s, %s, %s, %s)",
             [employee_name, job_title, salary, benefits])
         return HttpResponse('successfully submitted')
