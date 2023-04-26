@@ -206,7 +206,6 @@ def employee(request, id):
 @csrf_exempt
 def employee_form(request):
     if request.method == 'POST':
-        employee_id = request.POST.get('employe_id', '')
         employee_name = request.POST.get('employee_name', '')
         job_title = request.POST.get('job_title', '')
         salary = request.POST.get('salary', '')
@@ -214,8 +213,8 @@ def employee_form(request):
         cursor = connections['default'].cursor()
         db_response = cursor.execute("INSERT INTO employee "
             "(employee_id, employee_name, job_title, salary, benefits) "
-            "VALUES (%s, %s, %s, %s, %s)",
-            [employee_id, employee_name, job_title, salary, benefits])
+            "VALUES (%s, %s, %s, %s)",
+            [employee_name, job_title, salary, benefits])
         return HttpResponse('successfully submitted')
 
     template = loader.get_template('chi_api/employee_form.html')
