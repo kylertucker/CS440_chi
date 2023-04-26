@@ -23,3 +23,19 @@
 {% else %}
     <p>No vehicles available.</p>
 {% endif %}
+
+{#{% if vehicle.VIN %}#}
+{#    <form action="{% url 'delete_vehicle' vehicle.VIN %}" method="post">#}
+{#        {% csrf_token %}#}
+{#        <button type="submit">Delete Vehicle</button>#}
+{#    </form>#}
+{#{% endif %}#}
+
+    <form action="{% url 'delete_vehicle' vehicle.vehicle_id %}" method="post">
+        <button type="submit">Delete Vehicle</button>
+    </form>
+
+{#    {{ vehicle.vin }}    Add this line to print the VIN#}
+
+{##}
+{#{{ vehicle.vin }}#}

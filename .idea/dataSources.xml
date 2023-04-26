@@ -10,5 +10,11 @@
       <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/chi_db_app/db.sqlite3</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
+    <data-source source="LOCAL" name="User Data Source" uuid="c38565b4-9e79-4cb8-bff0-e48c149d4253">
+      <synchronize>true</synchronize>
+      <configured-by-url>true</configured-by-url>
+      <jdbc-driver>java.sql.Driver</jdbc-driver>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
   </component>
 </project>

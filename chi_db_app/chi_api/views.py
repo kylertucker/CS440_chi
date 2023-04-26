@@ -7,6 +7,10 @@ from chi_api.models import Vehicle, Customer, Employee
 from django.template import loader
 from django.views.decorators.csrf import csrf_exempt
 
+from django.shortcuts import redirect
+
+from .models import Vehicle
+
 
 def home_page(request):
     template = loader.get_template("chi_api/home_page.html")
@@ -182,3 +186,16 @@ def employee(request, id):
         "transactions": transactions
     }
     return HttpResponse(template.render(context, request))
+
+
+
+@csrf_exempt
+def delete_vehicle(request, id):
+    cursor = connections['default'].cursor()
+
+    # cursor.execute("DELETE FROM vehicles WHERE vin=?", (vehicle_id,))
+    # cursor.execute("SELECT * FROM vehicles "
+    #                "WHERE employee_id = %s", [id])
+
+    cursor.execute("DELETE FROM vehicle WHERE vehicle_id = %s", [id])
+    return redirect('vehicle_list')
