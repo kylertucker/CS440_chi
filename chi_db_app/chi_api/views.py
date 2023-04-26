@@ -202,3 +202,20 @@ def employee(request, id):
         "transactions": transactions
     }
     return HttpResponse(template.render(context, request))
+
+def employee_form(request):
+    if request.method == 'POST':
+        employee_id = request.POST.get('employe_id', '')
+        employee_name = request.POST.get('employee_name', '')
+        job_title = request.POST.get('job_title', '')
+        salary = request.POST.get('salary', '')
+        benefits = request.POST.get('benefits', '')
+        cursor = connections['default'].cursor()
+        db_response = cursor.execute("INSERT INTO employee "
+            "(employee_id, employee_name, job_title, salary, benefits) "
+            "VALUES (%s, %s, %s, %s, %s)",
+            [employee_id, employee_name, job_title, salary, benefits])
+        return HttpResponse('successfully submitted')
+
+    template = loader.get_template('chi_api/employee_form.html')
+    return HttpResponse(template.render(request=request))

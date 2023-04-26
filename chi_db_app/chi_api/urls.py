@@ -13,5 +13,6 @@ urlpatterns = [
     path('vehicle/<int:id>/add-history', views.add_vehicle_history, name='add_vehicle_history'),
     path("employee-list", views.employee_list, name='employee_list'),
     path("employee/<int:id>", views.employee, name='employee'),
-    path("employee/<int:id>/sales-stats", views.employee_sales_stats, name='employee_sales_stats')
+    path("employee/<int:id>/sales-stats", views.employee_sales_stats, name='employee_sales_stats'),
+    path("employee-form", views.employee_form, name="employee-form")
 ]
