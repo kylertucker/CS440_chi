@@ -203,6 +203,7 @@ def employee(request, id):
     }
     return HttpResponse(template.render(context, request))
 
+@csrf_exempt
 def employee_form(request):
     if request.method == 'POST':
         employee_id = request.POST.get('employe_id', '')
