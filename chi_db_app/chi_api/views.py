@@ -23,6 +23,30 @@ def vehicle_list(request):
     }
     return HttpResponse(template.render(context, request))
 
+@csrf_exempt
+def vehicle_form(request):
+    if request.method == 'POST':
+        vin = request.POST.get('vin', '')
+        make = request.POST.get('make', '')
+        model = request.POST.get('model', '')
+        year = request.POST.get('year', '')
+        trim = request.POST.get('trim', '')
+        color = request.POST.get('color', '')
+        mpg = request.POST.get('mpg', '')
+        mileage = request.POST.get('mileage', '')
+        country_of_assembly = request.POST.get('country_of_assembly', '')
+        active = 1
+        cursor = connections['default'].cursor()
+        db_response = cursor.execute("INSERT INTO vehicle "
+                                     "(vin, make, model, year, trim, color, mpg, mileage, country_of_assembly, active) "
+                                     "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
+                                     [vin, make, model, year, trim, color, mpg, mileage, country_of_assembly, active])
+        return redirect('vehicle_list')
+
+    template = loader.get_template('chi_api/vehicle_form.html')
+    return HttpResponse(template.render(request=request))
+
+
 
 def vehicle(request, id):
     # TODO switch to sql

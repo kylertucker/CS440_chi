@@ -1,5 +1,6 @@
 {% if vehicle_list %}
     <ul>
+    <button><a href="{% url 'vehicle-form' %}">create new vehicle</a></button>
     {% for vehicle in vehicle_list %}
         <li><a href="{%url 'vehicle' id=vehicle.vehicle_id%}">{{ vehicle.vin }}:
             {{ vehicle.year }} {{ vehicle.make }} {{ vehicle.model }}
