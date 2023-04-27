@@ -236,10 +236,10 @@ def employee_form(request):
         benefits = request.POST.get('benefits', '')
         cursor = connections['default'].cursor()
         db_response = cursor.execute("INSERT INTO employee "
-            "(name, job_title, salary, benefits) "
-            "VALUES (%s, %s, %s, %s)",
+            "(name, job_title, salary, benefits, active) "
+            "VALUES (%s, %s, %s, %s, 1)",
             [employee_name, job_title, salary, benefits])
-        return HttpResponse('successfully submitted')
+        return redirect("home")
 
     template = loader.get_template('chi_api/employee_form.html')
     return HttpResponse(template.render(request=request))
