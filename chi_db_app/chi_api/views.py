@@ -198,7 +198,7 @@ def customer_form(request):
 def employee_list(request):
     cursor = connections['default'].cursor()
 
-    cursor.execute("SELECT * FROM employee")
+    cursor.execute("SELECT * FROM employee WHERE active = 1 ")
     employees = cursor.fetchall()
     template = loader.get_template('chi_api/employee_list.html')
     context = {
@@ -243,3 +243,15 @@ def employee_form(request):
 
     template = loader.get_template('chi_api/employee_form.html')
     return HttpResponse(template.render(request=request))
+
+
+def employee_delete(request, employee_id):
+    if request.method == 'POST':
+        cursor = connections['default'].cursor()
+        cursor.execute('UPDATE employee '
+                       'SET active = 0 '
+                       'WHERE employee_id = %s',
+                       [employee_id])
+
+        # Redirect to a home page
+        return render(request, 'chi_api/home_page.html')
