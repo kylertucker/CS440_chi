@@ -10,6 +10,8 @@
     <h3>MPG: {{ vehicle.mpg }}</h3>
     <h3>Mileage: {{ vehicle.mileage }}</h3>
     <h3>Country of Assembly: {{ vehicle.country_of_assembly }}</h3>
+    <a href=" {% url 'update_vehicle' id=vehicle.vehicle_id%}">update vehicle</a><br><br>
+
     <button><a href=" {% url 'add_vehicle_history' id=vehicle.vehicle_id%}">add additional history</a></button>
 
     <h1>History</h1>
