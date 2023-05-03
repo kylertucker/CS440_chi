@@ -46,7 +46,32 @@ def vehicle_form(request):
     template = loader.get_template('chi_api/vehicle_form.html')
     return HttpResponse(template.render(request=request))
 
+def update_vehicle(request, id):
+    vehicle = Vehicle.objects.get(pk=id)
 
+    if request.method == 'POST':
+        make = request.POST.get('make', '')
+        model = request.POST.get('model', '')
+        year = request.POST.get('year', '')
+        trim_level = request.POST.get('trim', '')
+        color = request.POST.get('color', '')
+        mpg = request.POST.get('mpg', '')
+        assembly = request.POST.get('country_of_assembly', '')
+        mileage = request.POST.get('mileage', '')
+
+
+        cursor = connections['default'].cursor()
+        db_response = cursor.execute(
+            "UPDATE vehicle "
+            "SET make = %s, model = %s, year = %s, trim = %s, color = %s, mpg = %s, country_of_assembly = %s, mileage = %s "
+            "WHERE vehicle_id = %s",
+            [make, model, year, trim_level, color, mpg, assembly, mileage, id]
+        )
+
+        return redirect('vehicle', id=id)
+
+    context = {'vehicle': vehicle}
+    return render(request, 'chi_api/update_vehicle.html', context)
 
 def vehicle(request, id):
     # TODO switch to sql
