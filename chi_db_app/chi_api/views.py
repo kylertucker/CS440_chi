@@ -314,3 +314,25 @@ def employee_delete(request, employee_id):
 
         # Redirect to a home page
         return render(request, 'chi_api/home_page.html')
+
+def update_employee(request, id):
+    employee = Employee.objects.get(pk=id)
+
+    if request.method == 'POST':
+        name = request.POST.get('name', '')
+        job_title = request.POST.get('job_title', '')
+        salary = request.POST.get('salary', '')
+        benefits = request.POST.get('benefits', '')
+
+        cursor = connections['default'].cursor()
+        db_response = cursor.execute(
+            "UPDATE Employee "
+            "SET name = %s, job_title = %s, salary = %s, benefits = %s "
+            "WHERE employee_id = %s",
+            [name, job_title, salary, benefits, id]
+        )
+
+        return redirect('employee', id=id)
+
+    context = {'employee': employee}
+    return render(request, 'chi_api/update_employee.html', context)
