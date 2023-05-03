@@ -7,6 +7,10 @@ from chi_api.models import Vehicle, Customer, Employee, VehicleTransaction
 from django.template import loader
 from django.views.decorators.csrf import csrf_exempt
 
+from django.db import connection
+from django.http import HttpResponse
+from django.template import loader
+
 
 def home_page(request):
     template = loader.get_template("chi_api/home_page.html")
@@ -14,12 +18,28 @@ def home_page(request):
 
 
 def vehicle_list(request):
-    # TODO switch to sql
-    qs = Vehicle.objects.all()
+    with connection.cursor() as cursor:
+        cursor.execute('SELECT * FROM vehicle WHERE active=1')
+        rows = cursor.fetchall()
+        vehicles = []
+        for row in rows:
+            vehicle = {
+                'vehicle_id': row[0],
+                'vin': row[1],
+                'make': row[2],
+                'model': row[3],
+                'year': row[4],
+                'trim': row[5],
+                'color': row[6],
+                'mpg': row[7],
+                'mileage': row[8],
+                'country_of_assembly': row[9]
+            }
+            vehicles.append(vehicle)
 
-    template = loader.get_template("chi_api/vehicle_list.html")
+    template = loader.get_template('chi_api/vehicle_list.html')
     context = {
-        "vehicle_list": qs,
+        'vehicle_list': vehicles,
     }
     return HttpResponse(template.render(context, request))
 
@@ -73,15 +93,44 @@ def update_vehicle(request, id):
     context = {'vehicle': vehicle}
     return render(request, 'chi_api/update_vehicle.html', context)
 
+
 def vehicle(request, id):
-    # TODO switch to sql
-    vehicle = Vehicle.objects.get(pk=id)
+    # Fetch the vehicle using raw SQL
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT * FROM vehicle WHERE vehicle_id = %s", [id])
+        row = cursor.fetchone()
+        if not row:
+            return HttpResponse("Vehicle not found", status=404)
+
+        vehicle = {
+            'vehicle_id': row[0],
+            'vin': row[1],
+            'make': row[2],
+            'model': row[3],
+            'year': row[4],
+            'trim': row[5],
+            'color': row[6],
+            'mpg': row[7],
+            'mileage': row[8],
+            'country_of_assembly': row[9]
+        }
+
+    # Fetch the vehicle histories using raw SQL
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT * FROM vehicle_history WHERE vehicle_id = %s", [id])
+        history_rows = cursor.fetchall()
+        histories = []
+        for row in history_rows:
+            history = {
+                'history_id': row[0],
+                'history_type': row[1],
+                'description': row[2],
+                'history_date': row[3],
+                'vehicle_id': row[4],
+            }
+            histories.append(history)
+
     template = loader.get_template("chi_api/vehicle.html")
-
-    histories = []
-    for history in vehicle.vehiclehistory_set.all():
-        histories.append(history)
-
     context = {
         "vehicle": vehicle,
         "histories": histories
