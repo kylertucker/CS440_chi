@@ -19,5 +19,9 @@ urlpatterns = [
     path("employee-form", views.employee_form, name="employee-form"),
     path('employee/delete/<int:employee_id>/', views.employee_delete, name='employee_delete'),
     path("customer/<int:id>/add_transaction", views.add_transaction, name='add_transaction'),
-    path("employee-list/employee-search", views.employee_search, name='employee_search')
+    path("employee-list/employee-search", views.employee_search, name='employee_search'),
+    path("employee/<int:id>/update", views.update_employee, name="update_employee"),
+    path('customer/delete/<int:customer_id>/', views.customer_delete, name='customer_delete'),
+    path("customer/<int:id>/add_transaction", views.add_transaction, name='add_transaction'),
+    path('vehicle/<int:id>/delete/', views.delete_vehicle, name='delete_vehicle')
 ]

@@ -5,6 +5,8 @@
     <h3>Salary: {{ employee.3 }}</h3>
     <h3>Benefits: {{ employee.4 }}</h3>
 
+    <a href=" {% url 'update_employee' id=employee.0%}">update employee</a><br><br>
+
     <form method="POST" action="{% url 'employee_delete' employee.0 %}">
         {% csrf_token %}
         <button type="submit">Delete Employee</button>
