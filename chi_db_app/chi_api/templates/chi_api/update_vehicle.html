@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Update Vehicle Information</title>
+  </head>
+  <body>
+    <h1>Update Vehicle Information</h1>
+    <form method="post">
+      {% csrf_token %}
+      <label for="make">Make:</label>
+      <input type="text" id="make" name="make" value="{{ vehicle.make }}"><br>
+
+      <label for="model">Model:</label>
+      <input type="text" id="model" name="model" value="{{ vehicle.model }}"><br>
+
+      <label for="year">Year:</label>
+      <input type="text" id="year" name="year" value="{{ vehicle.year }}"><br>
+
+      <label for="trim">Trim Level:</label>
+      <input type="text" id="trim" name="trim" value="{{ vehicle.trim }}"><br>
+
+      <label for="color">Color:</label>
+      <input type="text" id="color" name="color" value="{{ vehicle.color }}"><br>
+
+      <label for="mpg">MPG:</label>
+      <input type="text" id="mpg" name="mpg" value="{{ vehicle.mpg }}"><br>
+
+      <label for="country_of_assembly">Country of Assembly:</label>
+      <input type="text" id="country_of_assembly" name="country_of_assembly" value="{{ vehicle.country_of_assembly }}"><br>
+
+       <label for="mileage">Mileage:</label>
+      <input type="text" id="mileage" name="mileage" value="{{ vehicle.mileage }}"><br>
+      
+        <input type="submit" value="Update">
+    </form>
+  </body>
+</html>
+
