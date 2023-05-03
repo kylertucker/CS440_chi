@@ -146,7 +146,7 @@ def add_transaction(request, id):
 def customer_list(request):
     cursor = connections['default'].cursor()
 
-    cursor.execute("SELECT * FROM customer")
+    cursor.execute("SELECT * FROM customer WHERE active = 1")
     customers = cursor.fetchall()
     template = loader.get_template('chi_api/customer_list.html')
     context = {
@@ -245,8 +245,8 @@ def customer_form(request):
         policy_number = request.POST.get('policy_number', '')
         cursor = connections['default'].cursor()
         db_response = cursor.execute("INSERT INTO customer "
-                                     "(name, license_number, license_state, insurance_provider, policy_number) "
-                                     "VALUES (%s, %s, %s, %s, %s)",
+                                     "(name, license_number, license_state, insurance_provider, policy_number, active) "
+                                     "VALUES (%s, %s, %s, %s, %s, 1)",
                                      [name, license_number, license_state, insurance_provider, policy_number])
         return HttpResponse('successfully submitted')
 
@@ -311,6 +311,17 @@ def employee_delete(request, employee_id):
                        'SET active = 0 '
                        'WHERE employee_id = %s',
                        [employee_id])
+
+        # Redirect to a home page
+        return render(request, 'chi_api/home_page.html')
+
+def customer_delete(request, customer_id):
+    if request.method == 'POST':
+        cursor = connections['default'].cursor()
+        cursor.execute('UPDATE customer '
+                       'SET active = 0 '
+                       'WHERE customer_id = %s',
+                       [customer_id])
 
         # Redirect to a home page
         return render(request, 'chi_api/home_page.html')
