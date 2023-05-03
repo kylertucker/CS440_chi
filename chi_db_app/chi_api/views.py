@@ -313,6 +313,26 @@ def employee_list(request):
     }
     return HttpResponse(template.render(context, request))
 
+@csrf_exempt
+def employee_search(request):
+    if request.method == 'POST':
+        employee_name = request.POST.get('employee_name', '')
+
+        cursor = connections['default'].cursor()
+        cursor.execute("SELECT employee_id FROM employee WHERE name = %s", [employee_name])
+        employee_result = cursor.fetchone()
+
+        if employee_result:
+            employee_id = employee_result[0]
+            return redirect('employee', id=employee_id)
+        else:
+            # Handle case when employee is not found
+            # You can redirect to an appropriate page or display an error message
+            return HttpResponse('Employee not found')
+
+    template = loader.get_template('chi_api/employee_search.html')
+    return HttpResponse(template.render(request=request))
+
 
 def employee(request, id):
     cursor = connections['default'].cursor()
