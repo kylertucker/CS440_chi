@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 
 from django.http import HttpResponse
 
-from chi_api.models import Vehicle, Customer, Employee
+from chi_api.models import Vehicle, Customer, Employee, VehicleTransaction
 from django.template import loader
 from django.views.decorators.csrf import csrf_exempt
 
@@ -84,6 +84,39 @@ def add_vehicle_history(request, id):
         "vehicle": vehicle
     }
     return render(request, 'chi_api/add_vehicle_history.html', context)
+
+@csrf_exempt
+def add_transaction(request, id):
+
+    customer = Customer.objects.get(pk=id)
+
+    if request.method == 'POST':
+        transaction_type = request.POST.get('transaction_type', '')
+        sale_price = request.POST.get('sale_price', '')
+        employee_name = request.POST.get('employee_name', '')
+        vehicle_vin = request.POST.get('vehicle_vin', '')
+
+        cursor = connections['default'].cursor()
+
+        vehicle_id_query = "SELECT vehicle_id FROM vehicle WHERE vin = %s"
+        cursor.execute(vehicle_id_query, [vehicle_vin])
+        vehicle_result = cursor.fetchone()
+        vehicle_id = vehicle_result[0] if vehicle_result else None
+
+        employee_id_query = "SELECT employee_id FROM employee WHERE name = %s"
+        cursor.execute(employee_id_query, [employee_name])
+        employee_result = cursor.fetchone()
+        employee_id = employee_result[0] if employee_result else None
+
+        insert_query = "INSERT INTO vehicle_transaction (transaction_type, sale_price, customer_id, employee_id, vehicle_id) VALUES (%s, %s, %s, %s, %s)"
+        cursor.execute(insert_query, [transaction_type, sale_price, id, employee_id, vehicle_id])
+
+        return redirect('customer', id=id)
+
+    context = {
+        'customer': customer
+    }
+    return render(request, 'chi_api/add_transaction.html', context)
 
 def customer_list(request):
     cursor = connections['default'].cursor()
@@ -226,6 +259,7 @@ def employee(request, id):
         "transactions": transactions
     }
     return HttpResponse(template.render(context, request))
+
 
 @csrf_exempt
 def employee_form(request):

@@ -7,6 +7,9 @@
     <h3>Policy Number: {{ customer.5 }}</h3>
     <a href="{% url 'update_customer' id=customer.0 %}">Edit</a>
 
+    <a href="{% url 'add_transaction' id=customer.0 %}">Add Transaction</a>
+
+
     <h1>Transactions</h1>
     {% if transactions %}
         {% for transaction in transactions %}
@@ -15,6 +18,7 @@
             <h3>Vehicle: {{ transaction.8 }} {{ transaction.9 }}</h3>
             <h3>Transaction Type: {{ transaction.1 }}</h3>
             <h3>Sale Price: {{ transaction.2 }}</h3>
+            <hr>
         {% endfor %}
     {% else %}
         <h3>No Transactions</h3>
