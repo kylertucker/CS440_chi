@@ -5,6 +5,11 @@
     <h3>Salary: {{ employee.3 }}</h3>
     <h3>Benefits: {{ employee.4 }}</h3>
 
+    <form method="POST" action="{% url 'employee_delete' employee.0 %}">
+        {% csrf_token %}
+        <button type="submit">Delete Employee</button>
+    </form>
+
     <h1>Transactions</h1>
     <a href="{% url 'employee_sales_stats' id=employee.0 %}">View Stats</a>
     {% if transactions %}
