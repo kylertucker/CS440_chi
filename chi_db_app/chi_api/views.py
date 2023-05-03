@@ -347,3 +347,19 @@ def customer_delete(request, customer_id):
 
         # Redirect to a home page
         return render(request, 'chi_api/home_page.html')
+
+@csrf_exempt
+def delete_vehicle(request, id):
+    cursor = connections['default'].cursor()
+
+    # cursor.execute("DELETE FROM vehicles WHERE vin=?", (vehicle_id,))
+    # cursor.execute("SELECT * FROM vehicles "
+    #                "WHERE employee_id = %s", [id])
+
+    cursor.execute( 'UPDATE vehicle '
+    'SET active = 0 '
+    'WHERE vehicle_id = %s', [id])
+
+
+    return redirect('vehicle_list')
+
