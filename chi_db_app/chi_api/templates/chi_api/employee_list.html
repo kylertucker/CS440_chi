@@ -1,10 +1,5 @@
 {% if employee_list %}
-    <form method="get">
-    <label for="name">Full Name:</label>
-    <input type="text" id="name" name="name" required>
-    <br>
-    <input type="submit" value="Submit">
-    </form>
+    <button><a href="{%  url 'employee_search' %}">Search for employee</a></button>
     <button><a href="{% url 'employee-form' %}">create new employee</a></button>
     <ul>
         {% for employee in employee_list %}
