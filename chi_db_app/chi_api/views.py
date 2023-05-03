@@ -256,6 +256,14 @@ def customer_form(request):
 def employee_list(request):
     cursor = connections['default'].cursor()
 
+    if request.method == 'GET':
+        name = request.get('name', '')
+        employee = cursor.execute("SELECT employee_id FROM employee WHERE name = %s", [name])
+        employee_id = employee[0][0]
+
+        return redirect('employee', id=employee_id)
+
+
     cursor.execute("SELECT * FROM employee WHERE active = 1 ")
     employees = cursor.fetchall()
     template = loader.get_template('chi_api/employee_list.html')
