@@ -32,8 +32,8 @@ def vehicle_list(request):
                 'trim': row[5],
                 'color': row[6],
                 'mpg': row[7],
-                'mileage': row[8],
-                'country_of_assembly': row[9]
+                'country_of_assembly': row[8],
+                'mileage': row[9]
             }
             vehicles.append(vehicle)
 
@@ -111,8 +111,8 @@ def vehicle(request, id):
             'trim': row[5],
             'color': row[6],
             'mpg': row[7],
-            'mileage': row[8],
-            'country_of_assembly': row[9]
+            'country_of_assembly': row[8],
+            'mileage': row[9]
         }
 
     # Fetch the vehicle histories using raw SQL
