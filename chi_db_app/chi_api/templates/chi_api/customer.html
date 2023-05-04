@@ -9,6 +9,10 @@
 
     <a href="{% url 'add_transaction' id=customer.0 %}">Add Transaction</a>
 
+    <form method="POST" action="{% url 'customer_delete' customer.0 %}">
+        {% csrf_token %}
+        <button type="submit">Delete Customer</button>
+    </form>
 
     <h1>Transactions</h1>
     {% if transactions %}

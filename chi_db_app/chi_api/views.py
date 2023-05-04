@@ -7,6 +7,10 @@ from chi_api.models import Vehicle, Customer, Employee, VehicleTransaction
 from django.template import loader
 from django.views.decorators.csrf import csrf_exempt
 
+from django.db import connection
+from django.http import HttpResponse
+from django.template import loader
+
 
 def home_page(request):
     template = loader.get_template("chi_api/home_page.html")
@@ -14,12 +18,28 @@ def home_page(request):
 
 
 def vehicle_list(request):
-    # TODO switch to sql
-    qs = Vehicle.objects.all()
+    with connection.cursor() as cursor:
+        cursor.execute('SELECT * FROM vehicle WHERE active=1')
+        rows = cursor.fetchall()
+        vehicles = []
+        for row in rows:
+            vehicle = {
+                'vehicle_id': row[0],
+                'vin': row[1],
+                'make': row[2],
+                'model': row[3],
+                'year': row[4],
+                'trim': row[5],
+                'color': row[6],
+                'mpg': row[7],
+                'country_of_assembly': row[8],
+                'mileage': row[9]
+            }
+            vehicles.append(vehicle)
 
-    template = loader.get_template("chi_api/vehicle_list.html")
+    template = loader.get_template('chi_api/vehicle_list.html')
     context = {
-        "vehicle_list": qs,
+        'vehicle_list': vehicles,
     }
     return HttpResponse(template.render(context, request))
 
@@ -73,15 +93,44 @@ def update_vehicle(request, id):
     context = {'vehicle': vehicle}
     return render(request, 'chi_api/update_vehicle.html', context)
 
+
 def vehicle(request, id):
-    # TODO switch to sql
-    vehicle = Vehicle.objects.get(pk=id)
+    # Fetch the vehicle using raw SQL
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT * FROM vehicle WHERE vehicle_id = %s", [id])
+        row = cursor.fetchone()
+        if not row:
+            return HttpResponse("Vehicle not found", status=404)
+
+        vehicle = {
+            'vehicle_id': row[0],
+            'vin': row[1],
+            'make': row[2],
+            'model': row[3],
+            'year': row[4],
+            'trim': row[5],
+            'color': row[6],
+            'mpg': row[7],
+            'country_of_assembly': row[8],
+            'mileage': row[9]
+        }
+
+    # Fetch the vehicle histories using raw SQL
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT * FROM vehicle_history WHERE vehicle_id = %s", [id])
+        history_rows = cursor.fetchall()
+        histories = []
+        for row in history_rows:
+            history = {
+                'history_id': row[0],
+                'history_type': row[1],
+                'description': row[2],
+                'history_date': row[3],
+                'vehicle_id': row[4],
+            }
+            histories.append(history)
+
     template = loader.get_template("chi_api/vehicle.html")
-
-    histories = []
-    for history in vehicle.vehiclehistory_set.all():
-        histories.append(history)
-
     context = {
         "vehicle": vehicle,
         "histories": histories
@@ -146,7 +195,7 @@ def add_transaction(request, id):
 def customer_list(request):
     cursor = connections['default'].cursor()
 
-    cursor.execute("SELECT * FROM customer")
+    cursor.execute("SELECT * FROM customer WHERE active = 1")
     customers = cursor.fetchall()
     template = loader.get_template('chi_api/customer_list.html')
     context = {
@@ -245,8 +294,8 @@ def customer_form(request):
         policy_number = request.POST.get('policy_number', '')
         cursor = connections['default'].cursor()
         db_response = cursor.execute("INSERT INTO customer "
-                                     "(name, license_number, license_state, insurance_provider, policy_number) "
-                                     "VALUES (%s, %s, %s, %s, %s)",
+                                     "(name, license_number, license_state, insurance_provider, policy_number, active) "
+                                     "VALUES (%s, %s, %s, %s, %s, 1)",
                                      [name, license_number, license_state, insurance_provider, policy_number])
         return HttpResponse('successfully submitted')
 
@@ -263,6 +312,26 @@ def employee_list(request):
         "employee_list": employees
     }
     return HttpResponse(template.render(context, request))
+
+@csrf_exempt
+def employee_search(request):
+    if request.method == 'POST':
+        employee_name = request.POST.get('employee_name', '')
+
+        cursor = connections['default'].cursor()
+        cursor.execute("SELECT employee_id FROM employee WHERE name = %s", [employee_name])
+        employee_result = cursor.fetchone()
+
+        if employee_result:
+            employee_id = employee_result[0]
+            return redirect('employee', id=employee_id)
+        else:
+            # Handle case when employee is not found
+            # You can redirect to an appropriate page or display an error message
+            return HttpResponse('Employee not found')
+
+    template = loader.get_template('chi_api/employee_search.html')
+    return HttpResponse(template.render(request=request))
 
 
 def employee(request, id):
@@ -336,3 +405,30 @@ def update_employee(request, id):
 
     context = {'employee': employee}
     return render(request, 'chi_api/update_employee.html', context)
+
+def customer_delete(request, customer_id):
+    if request.method == 'POST':
+        cursor = connections['default'].cursor()
+        cursor.execute('UPDATE customer '
+                       'SET active = 0 '
+                       'WHERE customer_id = %s',
+                       [customer_id])
+
+        # Redirect to a home page
+        return render(request, 'chi_api/home_page.html')
+
+@csrf_exempt
+def delete_vehicle(request, id):
+    cursor = connections['default'].cursor()
+
+    # cursor.execute("DELETE FROM vehicles WHERE vin=?", (vehicle_id,))
+    # cursor.execute("SELECT * FROM vehicles "
+    #                "WHERE employee_id = %s", [id])
+
+    cursor.execute( 'UPDATE vehicle '
+    'SET active = 0 '
+    'WHERE vehicle_id = %s', [id])
+
+
+    return redirect('vehicle_list')
+

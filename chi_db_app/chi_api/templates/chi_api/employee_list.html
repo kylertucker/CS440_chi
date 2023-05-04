@@ -1,4 +1,5 @@
 {% if employee_list %}
+    <button><a href="{%  url 'employee_search' %}">Search for employee</a></button>
     <button><a href="{% url 'employee-form' %}">create new employee</a></button>
     <ul>
         {% for employee in employee_list %}
